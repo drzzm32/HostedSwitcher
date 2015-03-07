@@ -54,8 +54,10 @@
     Private Sub SwitchHosted_Click(sender As Object, e As EventArgs) Handles SwitchHosted.Click
         If SwitchHosted.Text = "Start" Then
             CmdOut.Text = RunCMD("netsh wlan start hostednetwork")
+            SwitchHosted.Text = "Stop"
         Else
             CmdOut.Text = RunCMD("netsh wlan stop hostednetwork")
+            SwitchHosted.Text = "Start"
         End If
     End Sub
 
