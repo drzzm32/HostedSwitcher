@@ -1,6 +1,7 @@
 ﻿Public Class Main
     Private SSIDStr As String = ""
     Private PwdStr As String = ""
+
     Function RunCMD(ByVal Commands As String, Optional ByVal TimeOutMS As Integer = 1000) As String
         Dim myProcess As New Process()
         Dim myProcessStartInfo As New ProcessStartInfo("cmd.exe")
@@ -16,10 +17,11 @@
         myProcess.Close()
         Return myString
     End Function
+
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim TmpStr As String = RunCMD("netsh wlan show hostednetwork", 100)
         CmdOut.Text = TmpStr
-        If TmpStr.Contains("模式                   : 已启用") Then
+        If TmpStr.Contains("已启用") Then
             ModeON.Checked = True
         Else
             ModeOFF.Checked = True
@@ -45,9 +47,11 @@
 
     Private Sub SetHosted_Click(sender As Object, e As EventArgs) Handles SetHosted.Click
         If ModeOFF.Checked Then CmdOut.Text = RunCMD("netsh wlan set hostednetwork mode=disallow", 100)
-        If SSID.Text.Any And ModeON.Checked Then
+        If SSID.Text.Any And ModeON.Checked And Passwd.Text.Any Then
             CmdOut.Text = RunCMD("netsh wlan set hostednetwork mode=allow ssid=" & SSID.Text & " key=" & Passwd.Text, 100)
             SwitchHosted.Enabled = True
+        ElseIf SSID.Text.Any And ModeON.Checked Then
+            CmdOut.Text = RunCMD("netsh wlan set hostednetwork mode=allow ssid=" & SSID.Text, 100)
         End If
     End Sub
 
